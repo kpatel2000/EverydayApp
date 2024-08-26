@@ -12,7 +12,7 @@ class QuoteRepository {
         return if (response.isSuccessful && response.body() != null) {
             response.body()!![0]
         }else {
-            null;
+            null
         }
     }
 }

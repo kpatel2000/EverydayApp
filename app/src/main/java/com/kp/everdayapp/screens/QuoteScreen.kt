@@ -46,11 +46,16 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            text = quote?.category ?: "Category Name",
+            fontSize = 18.sp,
+            color = Color.Black
+        )
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(start = 20.dp, end = 20.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 10.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color.White
             ),
@@ -64,16 +69,24 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = if (quote.isNullOrBlank()) "Loading..." else quote!!,
+                    text = if (quote?.quote.isNullOrBlank()) "Loading..." else quote?.quote!!,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
-                    modifier = if (quote.isNullOrBlank()) Modifier
+                    modifier = if (quote?.quote.isNullOrBlank()) Modifier
                         .padding(all = 10.dp)
                         .fillMaxWidth() else Modifier.padding(all = 10.dp)
                 )
             }
         }
+
+        Text(text = quote?.author ?: "Author Name",
+            fontSize = 18.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 20.dp, top = 10.dp),
+            textAlign = TextAlign.End
+        )
 
         Button(
             onClick = { quoteViewModel.getQuote() },
