@@ -47,9 +47,10 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = quote?.category ?: "Category Name",
+            text = quote?.category?.uppercase() ?: "Category Name",
             fontSize = 18.sp,
-            color = Color.Black
+            color = Color.Black,
+            fontWeight = FontWeight.Bold
         )
         Card(
             modifier = Modifier
@@ -85,7 +86,8 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 20.dp, top = 10.dp),
-            textAlign = TextAlign.End
+            textAlign = TextAlign.End,
+            fontWeight = FontWeight.Bold
         )
 
         Button(
