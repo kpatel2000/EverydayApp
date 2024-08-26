@@ -51,41 +51,39 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//        Text(
-//            text = quote?.category?.uppercase() ?: "Category Name",
-//            fontSize = 18.sp,
-//            color = Color.Black,
-//            fontWeight = FontWeight.Bold
-//        )
-
-        LazySwipeCards(
-            cardModifier =  Modifier,
-            cardShape = RoundedCornerShape(16.dp),
-            cardShadowElevation = 4.dp,
-            visibleItemCount = 4,
-            rotateDegree = 15f,
-            translateSize = 24.dp,
-            animationSpec = SpringSpec(),
-            swipeThreshold = 0.5f,
-            scaleFactor = ScaleFactor(
-                scaleX = 0.1f,
-                scaleY = 0.1f
-            ),
-            contentPadding = PaddingValues(
-                vertical = 24.dp * 4, // visibleItemCount
-                horizontal = 24.dp
-            )
-        ) {
-            items(quote?.toMutableList()?: mutableListOf(QuoteData("Loading...","name", category = ""))){
-                CardContent(it)
-            }
-        }
-
-        }
+        if(quote?.isNotEmpty() == true)
+            SwipeCard(quote)
     }
+}
 
 @Composable
-fun CardContent (quote : QuoteData){
+fun SwipeCard(quote: List<QuoteData>?) {
+    LazySwipeCards(
+        cardModifier = Modifier,
+        cardShape = RoundedCornerShape(16.dp),
+        cardShadowElevation = 4.dp,
+        visibleItemCount = 4,
+        rotateDegree = 15f,
+        translateSize = 24.dp,
+        animationSpec = SpringSpec(),
+        swipeThreshold = 0.5f,
+        scaleFactor = ScaleFactor(
+            scaleX = 0.1f,
+            scaleY = 0.1f
+        ),
+        contentPadding = PaddingValues(
+            vertical = 24.dp * 4, // visibleItemCount
+            horizontal = 24.dp
+        )
+    ) {
+        items(quote?.toMutableList() ?: mutableListOf()) {
+            CardContent(it)
+        }
+    }
+}
+
+@Composable
+fun CardContent(quote: QuoteData) {
 
     Card(
         modifier = Modifier
@@ -114,7 +112,8 @@ fun CardContent (quote : QuoteData){
                     .fillMaxWidth() else Modifier.padding(all = 10.dp)
             )
 
-            Text(text = quote?.author ?: "Author Name",
+            Text(
+                text = quote?.author ?: "Author Name",
                 fontSize = 18.sp,
                 modifier = Modifier
                     .fillMaxWidth()
