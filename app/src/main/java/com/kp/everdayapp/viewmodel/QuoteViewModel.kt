@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 class QuoteViewModel : ViewModel(){
 
     private val quoteRepository = QuoteRepository()
-    private val _quote = MutableLiveData<QuoteData>()
-    val quoteLiveData: LiveData<QuoteData> = _quote
+    private val _quote = MutableLiveData<List<QuoteData>>()
+    val quoteLiveData: LiveData<List<QuoteData>> = _quote
 
     fun getQuote() = viewModelScope.launch {
         val quote = quoteRepository.getQuote()

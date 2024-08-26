@@ -7,10 +7,10 @@ class QuoteRepository {
 
     private val quoteService = RetrofitInstance.quoteService
 
-    suspend fun getQuote(): QuoteData? {
+    suspend fun getQuote(): List<QuoteData>? {
         val response = quoteService.getQuote()
         return if (response.isSuccessful && response.body() != null) {
-            response.body()!![0]
+            response.body()!!
         }else {
             null
         }

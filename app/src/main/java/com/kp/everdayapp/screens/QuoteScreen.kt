@@ -1,8 +1,10 @@
 package com.kp.everdayapp.screens
 
+import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,11 +24,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ScaleFactor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.aghajari.compose.lazyswipecards.LazySwipeCards
+import com.kp.everdayapp.models.QuoteData
 import com.kp.everdayapp.ui.theme.EverdayAppTheme
 import com.kp.everdayapp.viewmodel.QuoteViewModel
 
@@ -46,66 +51,76 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = quote?.category?.uppercase() ?: "Category Name",
-            fontSize = 18.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
-        )
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(start = 20.dp, end = 20.dp, top = 10.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
+//        Text(
+//            text = quote?.category?.uppercase() ?: "Category Name",
+//            fontSize = 18.sp,
+//            color = Color.Black,
+//            fontWeight = FontWeight.Bold
+//        )
+
+        LazySwipeCards(
+            cardModifier =  Modifier,
+            cardShape = RoundedCornerShape(16.dp),
+            cardShadowElevation = 4.dp,
+            visibleItemCount = 4,
+            rotateDegree = 15f,
+            translateSize = 24.dp,
+            animationSpec = SpringSpec(),
+            swipeThreshold = 0.5f,
+            scaleFactor = ScaleFactor(
+                scaleX = 0.1f,
+                scaleY = 0.1f
             ),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 10.dp
+            contentPadding = PaddingValues(
+                vertical = 24.dp * 4, // visibleItemCount
+                horizontal = 24.dp
             )
         ) {
-            Column(
-                modifier = Modifier.wrapContentSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = if (quote?.quote.isNullOrBlank()) "Loading..." else quote?.quote!!,
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    modifier = if (quote?.quote.isNullOrBlank()) Modifier
-                        .padding(all = 10.dp)
-                        .fillMaxWidth() else Modifier.padding(all = 10.dp)
-                )
+            items(quote?.toMutableList()?: mutableListOf(QuoteData("Loading...","name", category = ""))){
+                CardContent(it)
             }
         }
 
-        Text(text = quote?.author ?: "Author Name",
-            fontSize = 18.sp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 20.dp, top = 10.dp),
-            textAlign = TextAlign.End,
-            fontWeight = FontWeight.Bold
-        )
+        }
+    }
 
-        Button(
-            onClick = { quoteViewModel.getQuote() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp, top = 40.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4F96E2)
-            ),
-            shape = RoundedCornerShape(10.dp)
+@Composable
+fun CardContent (quote : QuoteData){
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(start = 20.dp, end = 20.dp, top = 10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp
+        )
+    ) {
+        Column(
+            modifier = Modifier.wrapContentSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Next",
-                modifier = Modifier.padding(all = 5.dp),
-                fontSize = 18.sp,
+                text = if (quote?.quote.isNullOrBlank()) "Loading..." else quote?.quote!!,
+                fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                textAlign = TextAlign.Center,
+                modifier = if (quote?.quote.isNullOrBlank()) Modifier
+                    .padding(all = 10.dp)
+                    .fillMaxWidth() else Modifier.padding(all = 10.dp)
+            )
+
+            Text(text = quote?.author ?: "Author Name",
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 20.dp, top = 10.dp),
+                textAlign = TextAlign.End,
+                fontWeight = FontWeight.Bold
             )
         }
     }
