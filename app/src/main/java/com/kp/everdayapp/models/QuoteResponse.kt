@@ -14,3 +14,8 @@ data class QuoteData(
     @Expose
     val category: String
 )
+
+data class Quote(
+    val quote: List<QuoteData>?,
+    val imageUrl: String?
+)

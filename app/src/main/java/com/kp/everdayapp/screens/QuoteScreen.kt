@@ -1,5 +1,7 @@
 package com.kp.everdayapp.screens
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,14 +10,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -32,19 +31,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ScaleFactor
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.aghajari.compose.lazyswipecards.LazySwipeCards
 import com.kp.everdayapp.R
@@ -60,7 +58,7 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel) {
     LaunchedEffect(key1 = Unit) {
         quoteViewModel.getQuote()
     }
-    val gradient = listOf(Color.Yellow, Color.Green)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,43 +66,65 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LazySwipeCards(
-            cardShape = RoundedCornerShape(16.dp),
-            cardShadowElevation = 4.dp,
-            visibleItemCount = 4,
-            rotateDegree = 15f,
-            translateSize = 24.dp,
-            animationSpec = SpringSpec(),
-            swipeThreshold = 0.5f,
-            scaleFactor = ScaleFactor(
-                scaleX = 0.1f,
-                scaleY = 0.1f
-            ),
-            contentPadding = PaddingValues(
-                vertical = 24.dp * 4, // visibleItemCount
-                horizontal = 24.dp
-            )
-        ) {
-            items(
-                quote?.toMutableList() ?: mutableListOf(
+        if (quote?.isNotEmpty() == true)
+            SwipeCard(quoteViewModel = quoteViewModel, quote = quote)
+        else
+            SwipeCard(
+                quoteViewModel = quoteViewModel,
+                quote = listOf(
                     QuoteData(
-                        "The secret of getting ahead is getting started.",
-                        "~ Mark Twain",
-                        category = ""
+                        "Patience is not the ability to wait, but the ability to keep a good attitude while waiting.",
+                        "Joyce Meyer",
+                        "Nature"
                     )
                 )
-            ) {
-                CardContent(it)
-            }
-        }
+            )
     }
 }
 
 @Composable
-fun CardContent(quote: QuoteData) {
+fun SwipeCard(quoteViewModel: QuoteViewModel, quote: List<QuoteData>?){
+    LazySwipeCards(
+        cardShape = RoundedCornerShape(16.dp),
+        cardShadowElevation = 4.dp,
+        visibleItemCount = 4,
+        rotateDegree = 15f,
+        translateSize = 24.dp,
+        animationSpec = SpringSpec(),
+        swipeThreshold = 0.5f,
+        scaleFactor = ScaleFactor(
+            scaleX = 0.1f,
+            scaleY = 0.1f
+        ),
+        contentPadding = PaddingValues(
+            vertical = 24.dp * 3,
+            horizontal = 24.dp
+        )
+    ) {
+        onSwiped { item, direction ->
+            quoteViewModel.getQuote()
+            quoteViewModel.resetLiveData()
+        }
+        items(
+            quote?.toMutableList() ?: mutableListOf(
+                QuoteData(
+                    "Loading...",
+                    "Author",
+                    category = ""
+                )
+            )
+        ) {
+            CardContent(it, quoteViewModel)
+        }
+    }
+}
+@OptIn(ExperimentalCoilApi::class)
+@Composable
+fun CardContent(quote: QuoteData, quoteViewModel: QuoteViewModel) {
 
-    val painter =
-        rememberImagePainter(data = "https://api.api-ninjas.com/v1/randomimage?category=" + quote.category.lowercase())
+    val image by quoteViewModel.image.observeAsState()
+
+    val painter: Painter  = painterResource(id = R.drawable.nature)
 
     Card(
         modifier = Modifier.fillMaxSize(),
@@ -119,13 +139,25 @@ fun CardContent(quote: QuoteData) {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Image(
-                painter = painter,
-                contentDescription = "Quote Background",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds,
-                alpha = 0.5f
-            )
+            if(image != null){
+                val imageBytes = Base64.decode(image, Base64.DEFAULT)
+                val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                Image(
+                    painter = rememberImagePainter(data = decodedImage),
+                    contentDescription = "Quote Background",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds,
+                    alpha = 0.5f
+                )
+            }else {
+                Image(
+                    painter = painter,
+                    contentDescription = "Quote Background",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds,
+                    alpha = 0.5f
+                )
+            }
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -140,22 +172,24 @@ fun CardContent(quote: QuoteData) {
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .padding(start = 20.dp, top = 40.dp, bottom = 10.dp)
-                            .height(70.dp),
+                            .height(30.dp),
                         alignment = Alignment.TopStart
                     )
                     Text(
                         text = if (quote?.quote.isNullOrBlank()) "Loading..." else quote?.quote!!,
-                        fontSize = 42.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Start,
                         color = Color.White,
+                        maxLines = 12,
+                        overflow = TextOverflow.Ellipsis,
                         modifier = if (quote?.quote.isNullOrBlank()) Modifier
                             .padding(all = 20.dp)
                             .fillMaxWidth() else Modifier.padding(all = 20.dp)
                     )
                     Text(
-                        text = quote?.author ?: "Author Name",
-                        fontSize = 20.sp,
+                        text = "~ ${quote?.author}" ?: "Author Name",
+                        fontSize = 16.sp,
                         color = Color.White,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -173,7 +207,7 @@ fun CardContent(quote: QuoteData) {
                 ) {
                     Button(
                         onClick = { /*TODO*/ },
-                        modifier = Modifier.size(70.dp),
+                        modifier = Modifier.size(50.dp),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE86043)),
                         contentPadding = PaddingValues(all = 2.dp)

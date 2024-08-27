@@ -14,9 +14,19 @@ class QuoteViewModel : ViewModel(){
     private val _quote = MutableLiveData<List<QuoteData>>()
     val quoteLiveData: LiveData<List<QuoteData>> = _quote
 
+    private val _image = MutableLiveData<String?>()
+    val image: LiveData<String?> = _image
+
     fun getQuote() = viewModelScope.launch {
         val quote = quoteRepository.getQuote()
-        _quote.value = quote!!
+        if(quote?.quote != null){
+            _quote.value = quote.quote!!
+        }
+        _image.value = quote?.imageUrl
+    }
+    fun resetLiveData() {
+        _quote.value = emptyList()
+        _image.value = null
     }
 
 }
