@@ -16,7 +16,6 @@ class QuoteRepository {
             val quote = mutableListOf<QuoteData>()
             quote.add(response.body()!![0])
             quote.add(QuoteData("", "", ""))
-            quote.add(QuoteData("", "", ""))
             val url = getCategoryImage(response.body()!![0].category.lowercase())
             return Quote(quote.toList(), url)
         } else {

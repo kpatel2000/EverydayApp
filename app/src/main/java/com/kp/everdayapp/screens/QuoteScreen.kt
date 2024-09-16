@@ -1,7 +1,10 @@
 package com.kp.everdayapp.screens
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.util.Base64
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,6 +32,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +57,7 @@ import com.kp.everdayapp.ui.theme.EverdayAppTheme
 import com.kp.everdayapp.viewmodel.QuoteViewModel
 
 @Composable
-fun QuoteScreen(quoteViewModel: QuoteViewModel) {
+fun QuoteScreen(quoteViewModel: QuoteViewModel, paddingValues: PaddingValues) {
 
     val quote by quoteViewModel.quoteLiveData.observeAsState(initial = null)
 
@@ -62,6 +68,7 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(paddingValues)
             .background(color = Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -97,7 +104,7 @@ fun SwipeCard(quoteViewModel: QuoteViewModel, quote: List<QuoteData>?){
             scaleY = 0.1f
         ),
         contentPadding = PaddingValues(
-            vertical = 24.dp * 3,
+            vertical = 24.dp * 2,
             horizontal = 24.dp
         )
     ) {
@@ -125,6 +132,7 @@ fun CardContent(quote: QuoteData, quoteViewModel: QuoteViewModel) {
     val image by quoteViewModel.image.observeAsState()
 
     val painter: Painter  = painterResource(id = R.drawable.nature)
+    var shareQuote by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier.fillMaxSize(),
@@ -206,7 +214,9 @@ fun CardContent(quote: QuoteData, quoteViewModel: QuoteViewModel) {
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            shareQuote = true
+                        },
                         modifier = Modifier.size(50.dp),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE86043)),
@@ -223,6 +233,22 @@ fun CardContent(quote: QuoteData, quoteViewModel: QuoteViewModel) {
             }
         }
     }
+    val shareIntent = remember {
+        Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, quote.quote)
+            type = "text/plain"
+        }
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {}
+    )
+    if (shareQuote) {
+        launcher.launch(Intent.createChooser(shareIntent, "Share via"))
+        shareQuote = false
+    }
 }
 
 
@@ -231,6 +257,6 @@ fun CardContent(quote: QuoteData, quoteViewModel: QuoteViewModel) {
 fun Preview() {
     EverdayAppTheme {
         val viewModel = QuoteViewModel()
-        QuoteScreen(viewModel)
+        QuoteScreen(viewModel, paddingValues = PaddingValues(10.dp))
     }
 }
