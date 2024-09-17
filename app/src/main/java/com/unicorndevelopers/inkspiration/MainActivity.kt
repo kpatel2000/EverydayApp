@@ -1,4 +1,4 @@
-package com.kp.everdayapp
+package com.unicorndevelopers.inkspiration
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,9 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.kp.everdayapp.screens.QuoteScreen
-import com.kp.everdayapp.ui.theme.EverdayAppTheme
-import com.kp.everdayapp.viewmodel.QuoteViewModel
+import com.unicorndevelopers.inkspiration.screens.QuoteScreen
+import com.unicorndevelopers.inkspiration.ui.theme.EverdayAppTheme
+import com.unicorndevelopers.inkspiration.viewmodel.QuoteViewModel
 
 class MainActivity : ComponentActivity() {
     private val quoteViewModel: QuoteViewModel by viewModels()

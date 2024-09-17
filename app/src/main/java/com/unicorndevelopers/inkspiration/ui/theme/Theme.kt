@@ -1,4 +1,4 @@
-package com.kp.everdayapp.ui.theme
+package com.unicorndevelopers.inkspiration.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

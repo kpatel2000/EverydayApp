@@ -1,6 +1,6 @@
-package com.kp.everdayapp.service
+package com.unicorndevelopers.inkspiration.service
 
-import com.kp.everdayapp.models.QuoteData
+import com.unicorndevelopers.inkspiration.models.QuoteData
 import retrofit2.Response
 import retrofit2.http.GET
 

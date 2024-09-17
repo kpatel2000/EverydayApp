@@ -1,4 +1,4 @@
-package com.kp.everdayapp
+package com.unicorndevelopers.inkspiration
 
 import org.junit.Test
 

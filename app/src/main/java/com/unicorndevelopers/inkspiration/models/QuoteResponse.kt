@@ -1,4 +1,4 @@
-package com.kp.everdayapp.models
+package com.unicorndevelopers.inkspiration.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

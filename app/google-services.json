@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:803763338044:android:193ea180739e2e339abc39",
+        "mobilesdk_app_id": "1:803763338044:android:07c58cc5f13c40c99abc39",
         "android_client_info": {
-          "package_name": "com.kp.everdayapp"
+          "package_name": "com.unicorndevelopers.inkspiration"
         }
       },
       "oauth_client": [],

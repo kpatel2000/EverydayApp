@@ -1,9 +1,9 @@
-package com.kp.everdayapp.repository
+package com.unicorndevelopers.inkspiration.repository
 
 import android.util.Log
-import com.kp.everdayapp.models.Quote
-import com.kp.everdayapp.models.QuoteData
-import com.kp.everdayapp.utils.RetrofitInstance
+import com.unicorndevelopers.inkspiration.models.Quote
+import com.unicorndevelopers.inkspiration.models.QuoteData
+import com.unicorndevelopers.inkspiration.utils.RetrofitInstance
 
 class QuoteRepository {
 

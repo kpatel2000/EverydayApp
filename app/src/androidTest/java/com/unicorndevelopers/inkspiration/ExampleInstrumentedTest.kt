@@ -1,4 +1,4 @@
-package com.kp.everdayapp
+package com.unicorndevelopers.inkspiration
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.kp.everdayapp", appContext.packageName)
+        assertEquals("com.kp.inkspiration", appContext.packageName)
     }
 }

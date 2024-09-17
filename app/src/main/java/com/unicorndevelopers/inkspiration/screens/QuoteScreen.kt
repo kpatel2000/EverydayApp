@@ -1,4 +1,4 @@
-package com.kp.everdayapp.screens
+package com.unicorndevelopers.inkspiration.screens
 
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -51,10 +51,10 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.aghajari.compose.lazyswipecards.LazySwipeCards
-import com.kp.everdayapp.R
-import com.kp.everdayapp.models.QuoteData
-import com.kp.everdayapp.ui.theme.EverdayAppTheme
-import com.kp.everdayapp.viewmodel.QuoteViewModel
+import com.unicorndevelopers.inkspiration.R
+import com.unicorndevelopers.inkspiration.models.QuoteData
+import com.unicorndevelopers.inkspiration.ui.theme.EverdayAppTheme
+import com.unicorndevelopers.inkspiration.viewmodel.QuoteViewModel
 
 @Composable
 fun QuoteScreen(quoteViewModel: QuoteViewModel, paddingValues: PaddingValues) {

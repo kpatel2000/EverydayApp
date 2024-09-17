@@ -16,11 +16,11 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.kp.everdayapp"
+    namespace = "com.unicorndevelopers.inkspiration"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.kp.everdayapp"
+        applicationId = "com.unicorndevelopers.inkspiration"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

@@ -1,11 +1,11 @@
-package com.kp.everdayapp.viewmodel
+package com.unicorndevelopers.inkspiration.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kp.everdayapp.models.QuoteData
-import com.kp.everdayapp.repository.QuoteRepository
+import com.unicorndevelopers.inkspiration.models.QuoteData
+import com.unicorndevelopers.inkspiration.repository.QuoteRepository
 import kotlinx.coroutines.launch
 
 class QuoteViewModel : ViewModel(){

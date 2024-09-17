@@ -1,8 +1,8 @@
-package com.kp.everdayapp.utils
+package com.unicorndevelopers.inkspiration.utils
 
-import com.kp.everdayapp.BuildConfig
-import com.kp.everdayapp.service.ImageService
-import com.kp.everdayapp.service.QuoteService
+import com.unicorndevelopers.inkspiration.BuildConfig
+import com.unicorndevelopers.inkspiration.service.ImageService
+import com.unicorndevelopers.inkspiration.service.QuoteService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
