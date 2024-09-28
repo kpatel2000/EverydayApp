@@ -42,6 +42,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ScaleFactor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -69,7 +71,7 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel, paddingValues: PaddingValues) {
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-            .background(color = Color.White),
+            .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -104,7 +106,7 @@ fun SwipeCard(quoteViewModel: QuoteViewModel, quote: List<QuoteData>?){
             scaleY = 0.1f
         ),
         contentPadding = PaddingValues(
-            vertical = 24.dp * 2,
+            vertical = 20.dp * 2,
             horizontal = 24.dp
         )
     ) {
@@ -209,7 +211,7 @@ fun CardContent(quote: QuoteData, quoteViewModel: QuoteViewModel) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 30.dp),
+                        .padding(bottom = 30.dp, top = 10.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.Bottom
                 ) {
@@ -252,11 +254,12 @@ fun CardContent(quote: QuoteData, quoteViewModel: QuoteViewModel) {
 }
 
 
-@Preview(showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 fun Preview() {
     EverdayAppTheme {
         val viewModel = QuoteViewModel()
-        QuoteScreen(viewModel, paddingValues = PaddingValues(10.dp))
+        val paddingValues = PaddingValues(all = 10.dp)
+        QuoteScreen(viewModel, paddingValues)
     }
 }
