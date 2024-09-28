@@ -83,7 +83,6 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel, paddingValues: PaddingValues) {
                 quote = listOf(
                     QuoteData(
                         "Patience is not the ability to wait, but the ability to keep a good attitude while waiting.",
-                        "Joyce Meyer",
                         "Nature"
                     )
                 )
@@ -114,11 +113,11 @@ fun SwipeCard(quoteViewModel: QuoteViewModel, quote: List<QuoteData>?){
             quoteViewModel.getQuote()
             quoteViewModel.resetLiveData()
         }
+        //TODO: Show loader if data is empty
         items(
             quote?.toMutableList() ?: mutableListOf(
                 QuoteData(
                     "Loading...",
-                    "Author",
                     category = ""
                 )
             )
@@ -197,7 +196,7 @@ fun CardContent(quote: QuoteData, quoteViewModel: QuoteViewModel) {
                             .padding(all = 20.dp)
                             .fillMaxWidth() else Modifier.padding(all = 20.dp)
                     )
-                    Text(
+                    /*Text(
                         text = "~ ${quote?.author}" ?: "Author Name",
                         fontSize = 16.sp,
                         color = Color.White,
@@ -206,7 +205,7 @@ fun CardContent(quote: QuoteData, quoteViewModel: QuoteViewModel) {
                             .padding(end = 40.dp, top = 10.dp),
                         textAlign = TextAlign.End,
                         fontWeight = FontWeight.Medium
-                    )
+                    )*/
                 }
                 Row(
                     modifier = Modifier

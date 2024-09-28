@@ -4,6 +4,7 @@ import android.util.Log
 import com.unicorndevelopers.inkspiration.models.Quote
 import com.unicorndevelopers.inkspiration.models.QuoteData
 import com.unicorndevelopers.inkspiration.utils.RetrofitInstance
+import kotlin.text.Typography.quote
 
 class QuoteRepository {
 
@@ -11,15 +12,18 @@ class QuoteRepository {
     private val imageService = RetrofitInstance.imageService
 
     suspend fun getQuote(): Quote? {
-        val response = quoteService.getQuote()
-        return if (response.isSuccessful && response.body() != null) {
-            val quote = mutableListOf<QuoteData>()
-            quote.add(response.body()!![0])
-            quote.add(QuoteData("", "", ""))
-            val url = getCategoryImage(response.body()!![0].category.lowercase())
-            return Quote(quote.toList(), url)
-        } else {
-            null
+        try {
+
+            val response = quoteService.getQuote()
+            return if (response.isSuccessful && response.body() != null) {
+                val url = getCategoryImage("nature")
+                return Quote(response.body()?.data, url)
+            } else {
+                null
+            }
+        }catch (ex: Exception) {
+            Log.d("API Call", "Error: ${ex.message}")
+            return null
         }
     }
 
@@ -33,7 +37,7 @@ class QuoteRepository {
             }
         } catch (ex: Exception) {
             url = null
-            Log.d("TAG", "getCategoryImage: ${ex.message}")
+            Log.d("API Call", "getCategoryImage: ${ex.message}")
         }
         return url
     }
