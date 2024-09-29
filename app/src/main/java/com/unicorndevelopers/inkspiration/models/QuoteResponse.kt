@@ -26,5 +26,6 @@ data class QuoteData(
 
 data class Quote(
     val quote: List<QuoteData>?,
-    val imageUrl: String?
+    val imageUrl: List<String?>?,
+    val networkIssue: Boolean = true
 )

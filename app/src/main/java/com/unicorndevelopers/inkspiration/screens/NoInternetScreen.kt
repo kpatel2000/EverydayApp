@@ -1,5 +1,6 @@
 package com.unicorndevelopers.inkspiration.screens
 
+import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,17 +17,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.ImageLoader
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import com.unicorndevelopers.inkspiration.R
 
 
 @Composable
-fun NoInternetScreen(paddingValues: PaddingValues) {
+fun NoInternetScreen(paddingValues: PaddingValues, onTryAgainClicked: () -> Unit) {
 
     Column(
         modifier = Modifier
@@ -36,9 +42,17 @@ fun NoInternetScreen(paddingValues: PaddingValues) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+        val imageLoader = ImageLoader.Builder(LocalContext.current)
+            .components {
+                if (SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
+            }
+            .build()
         Image(
-            painter = painterResource(id = R.drawable.no_internet),
+            painter = rememberAsyncImagePainter(R.drawable.no_internet, imageLoader),
             contentDescription = "No Internet Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -62,7 +76,7 @@ fun NoInternetScreen(paddingValues: PaddingValues) {
                 .align(Alignment.CenterHorizontally)
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onTryAgainClicked() },
             modifier = Modifier.padding(top = 40.dp),
             contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE86043)),
@@ -82,6 +96,8 @@ fun NoInternetScreen(paddingValues: PaddingValues) {
 @Composable
 fun PreviewScreen() {
     val paddingValues = PaddingValues(all = 10.dp)
-    NoInternetScreen(paddingValues)
+    NoInternetScreen(paddingValues){
+
+    }
 
 }

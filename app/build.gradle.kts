@@ -103,6 +103,7 @@ dependencies {
     implementation(libs.material3)
 
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
 
     implementation(libs.converter.scalars)
 
