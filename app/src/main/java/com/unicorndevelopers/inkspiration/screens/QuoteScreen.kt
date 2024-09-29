@@ -189,14 +189,22 @@ fun CardContent(quote: QuoteData?, image: String?) {
                         }
                     }
                     .build()
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        R.drawable.quote_feather_loader,
-                        imageLoader
-                    ),
-                    contentDescription = "Quote Background",
-                    modifier = Modifier.fillMaxSize().background(color = Color(0xFFE7E4E4))
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize().background(Color.White),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            R.drawable.quote_feather_loader,
+                            imageLoader
+                        ),
+                        contentDescription = "Quote Background",
+                        modifier = Modifier.size(width = 200.dp, height = 200.dp)
+                            .padding(start = 20.dp, bottom = 20.dp),
+                    )
+                }
+
             }else {
                 val painter: Painter  = painterResource(id = R.drawable.nature)
 
@@ -262,7 +270,7 @@ fun CardContent(quote: QuoteData?, image: String?) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 30.dp, top = 10.dp),
+                            .padding(bottom = 40.dp, top = 10.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.Bottom
                     ) {

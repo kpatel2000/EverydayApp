@@ -56,15 +56,15 @@ fun NoInternetScreen(paddingValues: PaddingValues, onTryAgainClicked: () -> Unit
             contentDescription = "No Internet Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .padding(top = 20.dp, bottom = 20.dp)
-                .height(280.dp)
+                .padding(bottom = 20.dp)
+                .height(250.dp)
         )
         Text(
             text = "Ooops!",
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp)
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                 .align(Alignment.CenterHorizontally)
         )
         Text(
@@ -72,6 +72,7 @@ fun NoInternetScreen(paddingValues: PaddingValues, onTryAgainClicked: () -> Unit
             color = Color.Black,
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
+            lineHeight = 20.sp,
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                 .align(Alignment.CenterHorizontally)
         )
