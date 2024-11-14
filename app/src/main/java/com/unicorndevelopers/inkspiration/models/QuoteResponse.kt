@@ -2,6 +2,7 @@ package com.unicorndevelopers.inkspiration.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.util.Queue
 
 
 data class QuoteResponse(
@@ -15,6 +16,7 @@ data class QuoteResponse(
     @Expose
     val total: Int
 )
+
 data class QuoteData(
     @SerializedName("quote")
     @Expose
@@ -25,7 +27,7 @@ data class QuoteData(
 )
 
 data class Quote(
-    val quote: List<QuoteData>?,
-    val imageUrl: List<String?>?,
+    val quote: Queue<QuoteData>?,
+    val imageUrl: Queue<String?>?,
     val networkIssue: Boolean = true
 )

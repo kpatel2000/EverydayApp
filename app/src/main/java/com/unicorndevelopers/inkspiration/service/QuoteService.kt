@@ -7,6 +7,6 @@ import retrofit2.http.GET
 
 interface QuoteService {
 
-    @GET("api/quotes/?limit=2")
+    @GET("api/quotes/?limit=3")
     suspend fun getQuote(): Response<QuoteResponse>
 }

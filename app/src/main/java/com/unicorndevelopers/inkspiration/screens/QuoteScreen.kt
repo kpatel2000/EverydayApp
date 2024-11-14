@@ -66,20 +66,22 @@ import com.unicorndevelopers.inkspiration.models.Quote
 import com.unicorndevelopers.inkspiration.models.QuoteData
 import com.unicorndevelopers.inkspiration.ui.theme.EverdayAppTheme
 import com.unicorndevelopers.inkspiration.viewmodel.QuoteViewModel
+import java.util.LinkedList
 import kotlin.text.Typography.quote
 
 @Composable
 fun QuoteScreen(quoteViewModel: QuoteViewModel, paddingValues: PaddingValues) {
 
     val quote by quoteViewModel.quoteLiveData.observeAsState(initial = null)
+    val bufferQuote by quoteViewModel.bufferQuoteLiveData.observeAsState(initial = null)
 
     LaunchedEffect(key1 = Unit) {
-        quoteViewModel.getQuote()
+        quoteViewModel.getQuote(null)
     }
-    if (quote != null && quote?.networkIssue == true){
+    if (bufferQuote != null && bufferQuote?.networkIssue == true) {
         NoInternetScreen(paddingValues) {
             quoteViewModel.resetLiveData()
-            quoteViewModel.getQuote()
+            quoteViewModel.getQuote(null)
         }
     } else {
         Column(
@@ -91,19 +93,20 @@ fun QuoteScreen(quoteViewModel: QuoteViewModel, paddingValues: PaddingValues) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (quote?.quote?.isNotEmpty() == true)
-                SwipeCard(quoteViewModel = quoteViewModel, quote = quote)
+                SwipeCard(quoteViewModel = quoteViewModel, quote = quote, bufferQuote = bufferQuote)
             else
                 SwipeCard(
                     quoteViewModel = quoteViewModel,
-                    quote = null
+                    quote = null,
+                    bufferQuote = null
                 )
         }
     }
 }
 
 @Composable
-fun SwipeCard(quoteViewModel: QuoteViewModel, quote: Quote?){
-    if(quote == null) {
+fun SwipeCard(quoteViewModel: QuoteViewModel, quote: Quote?, bufferQuote: Quote?) {
+    if (quote == null) {
         LazySwipeCards(
             cardShape = RoundedCornerShape(16.dp),
             cardShadowElevation = 4.dp,
@@ -122,14 +125,14 @@ fun SwipeCard(quoteViewModel: QuoteViewModel, quote: Quote?){
             )
         ) {
             onSwiped { item, direction ->
-                quoteViewModel.getQuote()
+                quoteViewModel.getQuote(null)
                 quoteViewModel.resetLiveData()
             }
             itemsIndexed(mutableListOf(null)) { index, quoteData ->
                 CardContent(quoteData, null)
             }
         }
-    }else {
+    } else {
         LazySwipeCards(
             cardShape = RoundedCornerShape(16.dp),
             cardShadowElevation = 4.dp,
@@ -148,14 +151,11 @@ fun SwipeCard(quoteViewModel: QuoteViewModel, quote: Quote?){
             )
         ) {
             onSwiped { item, direction ->
-                quoteViewModel.getQuote()
-                quoteViewModel.resetLiveData()
+                quoteViewModel.updateQuote()
+                quoteViewModel.getQuote(quote)
             }
             itemsIndexed(quote.quote?.toMutableList() ?: mutableListOf(null)) { index, quoteData ->
-                var image: String? = null
-                if(index != 1){
-                    image = quote.imageUrl?.get(index = index)
-                }
+                val image: String? = quote.imageUrl?.toMutableList()?.get(index)
                 CardContent(quoteData, image)
             }
         }
@@ -179,7 +179,7 @@ fun CardContent(quote: QuoteData?, image: String?) {
                 .fillMaxSize()
         ) {
             //Showing Loader in case quote is not available
-            if(quote == null) {
+            if (quote == null) {
                 val imageLoader = ImageLoader.Builder(LocalContext.current)
                     .components {
                         if (SDK_INT >= 28) {
@@ -190,23 +190,26 @@ fun CardContent(quote: QuoteData?, image: String?) {
                     }
                     .build()
                 Column(
-                    modifier = Modifier.fillMaxSize().background(Color.White),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     Image(
                         painter = rememberAsyncImagePainter(
                             R.drawable.quote_feather_loader,
                             imageLoader
                         ),
                         contentDescription = "Quote Background",
-                        modifier = Modifier.size(width = 200.dp, height = 200.dp)
+                        modifier = Modifier
+                            .size(width = 200.dp, height = 200.dp)
                             .padding(start = 20.dp, bottom = 20.dp),
                     )
                 }
 
-            }else {
-                val painter: Painter  = painterResource(id = R.drawable.nature)
+            } else {
+                val painter: Painter = painterResource(id = R.drawable.nature)
 
                 if (!image.isNullOrEmpty()) {
                     val imageBytes = Base64.decode(image, Base64.DEFAULT)
