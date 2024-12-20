@@ -1,48 +1,75 @@
 package com.unicorndevelopers.inkspiration.repository
 
 import android.util.Log
-import com.unicorndevelopers.inkspiration.models.Quote
-import com.unicorndevelopers.inkspiration.models.QuoteData
 import com.unicorndevelopers.inkspiration.utils.RetrofitInstance
 import java.net.UnknownHostException
-import kotlin.text.Typography.quote
 
 class QuoteRepository {
 
     private val quoteService = RetrofitInstance.quoteService
     private val imageService = RetrofitInstance.imageService
 
-    suspend fun getQuote(): Quote? {
+    suspend fun getQuote(limit: Int): List<String>? {
         try {
-            val response = quoteService.getQuote()
+            val response = quoteService.getQuote(limit)
             return if (response.isSuccessful && response.body() != null) {
-                val imageUrlList = ArrayList<String?>()
-                val url = getCategoryImage("nature")
-                imageUrlList.add(url)
-                Log.d("API Call", "Success: ${response.body()} \n $imageUrlList")
-                return Quote(response.body()?.data, imageUrlList.toList(), networkIssue = false)
+                val quoteList = ArrayList<String>()
+                response.body()?.data?.forEach {
+                    quoteList.add(it.quote)
+                }
+                return quoteList
             } else {
                 null
             }
-        }catch (ex: UnknownHostException){
+        } catch (ex: UnknownHostException) {
             Log.d("API Call", "Error: ${ex.message}")
-            return Quote(quote = null, imageUrl = null, networkIssue = true)
-        }
-        catch (ex: Exception) {
+            return emptyList()
+        } catch (ex: Exception) {
             Log.d("API Call", "Error: ${ex.message}")
             return null
         }
     }
 
-    suspend fun getCategoryImage(category: String): String? {
+    suspend fun prefetchQuote(): String? {
+        try {
+            val response = quoteService.getQuote(1)
+            return if (response.isSuccessful && response.body() != null) {
+                return response.body()!!.data[0].quote
+            } else {
+                null
+            }
+        } catch (ex: UnknownHostException) {
+            Log.d("API Call", "Error: ${ex.message}")
+            return ""
+        } catch (ex: Exception) {
+            Log.d("API Call", "Error: ${ex.message}")
+            return null
+        }
+    }
+
+    suspend fun getCategoryImage(category: String, count: Int): List<String?> {
+        val url = ArrayList<String?>()
+        for (i in 1..count) {
+            try {
+                val response = imageService.getCategoryImage(category)
+                if (response.isSuccessful && response.body() != null) {
+                    url.add(response.body())
+                }
+            } catch (ex: Exception) {
+                Log.d("API Call", "getCategoryImage: ${ex.message}")
+            }
+        }
+        return url
+    }
+
+    suspend fun prefetchCategoryImage(): String? {
         var url: String? = null
         try {
-            val response = imageService.getCategoryImage(category)
+            val response = imageService.getCategoryImage("nature")
             if (response.isSuccessful && response.body() != null) {
                 url = response.body()
             }
         } catch (ex: Exception) {
-            url = null
             Log.d("API Call", "getCategoryImage: ${ex.message}")
         }
         return url
