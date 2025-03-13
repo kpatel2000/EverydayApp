@@ -16,15 +16,15 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.kp.everdayapp"
+    namespace = "com.unicorndevelopers.inkspiration"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.kp.everdayapp"
+        applicationId = "com.unicorndevelopers.inkspiration"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.2"
 
         buildConfigField("String", "API_KEY", "\"${localProperties["QUOTE_API_KEY"]}\"")
 
@@ -94,4 +94,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.lazyswipecards)
+
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+
+    implementation(libs.converter.scalars)
+
 }
