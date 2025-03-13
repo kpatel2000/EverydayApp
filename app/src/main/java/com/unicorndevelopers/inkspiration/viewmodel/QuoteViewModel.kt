@@ -22,9 +22,7 @@ class QuoteViewModel : ViewModel(){
         when(event) {
             QuotesUiEvents.NextQuote -> {
                 if (_uiState.value.quotes.isNotEmpty()) {
-                    _uiState.update {
-                        it.copy(quotes = it.quotes.drop(1), images = it.images.drop(1))
-                    }
+                    _uiState.value.images.removeAt(0)
                     if(_uiState.value.quotes.size < 3) {
                         prefetchQuote()
                     }
@@ -34,8 +32,6 @@ class QuoteViewModel : ViewModel(){
             QuotesUiEvents.TryAgain -> {
                 getQuotes()
             }
-
-            QuotesUiEvents.ShareQuote -> TODO()
         }
     }
 
@@ -58,17 +54,15 @@ class QuoteViewModel : ViewModel(){
 
     private fun prefetchQuote() {
         viewModelScope.launch {
-            val quotesList = _uiState.value.quotes as ArrayList<String>
-            val imagesList = _uiState.value.images as ArrayList<String?>
+            val quotesList = _uiState.value.quotes
+            val imagesList = _uiState.value.images
             val quoteResponse = quoteRepository.prefetchQuote()
             val imageResponse = quoteRepository.prefetchCategoryImage()
             if(!quoteResponse.isNullOrEmpty() && imageResponse != null) {
                 quotesList.add(quoteResponse)
                 imagesList.add(imageResponse)
-                val updatedQuoteList: List<String> = quotesList
-                val updatedImageList: List<String?> = imagesList
                 _uiState.update {
-                    it.copy(quotes = updatedQuoteList, images = updatedImageList)
+                    it.copy(quotes = quotesList, images = imagesList)
                 }
             } else if(quoteResponse != null && quoteResponse.isEmpty()) {
                 _uiState.update { it.copy(isNetworkError = true) }
@@ -78,8 +72,8 @@ class QuoteViewModel : ViewModel(){
 }
 
 data class UiStates(
-    val quotes: List<String> = emptyList(),
-    val images: List<String?> = emptyList(),
+    val quotes: ArrayList<String> = ArrayList(),
+    val images: ArrayList<String?> = ArrayList(),
     val isLoading: Boolean = false,
     val isNetworkError: Boolean = false
 )
@@ -87,5 +81,4 @@ data class UiStates(
 sealed interface QuotesUiEvents {
     data object NextQuote : QuotesUiEvents
     data object TryAgain : QuotesUiEvents
-    data object ShareQuote : QuotesUiEvents
 }

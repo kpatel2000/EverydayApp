@@ -9,7 +9,7 @@ class QuoteRepository {
     private val quoteService = RetrofitInstance.quoteService
     private val imageService = RetrofitInstance.imageService
 
-    suspend fun getQuote(limit: Int): List<String>? {
+    suspend fun getQuote(limit: Int): ArrayList<String>? {
         try {
             val response = quoteService.getQuote(limit)
             return if (response.isSuccessful && response.body() != null) {
@@ -23,7 +23,7 @@ class QuoteRepository {
             }
         } catch (ex: UnknownHostException) {
             Log.d("API Call", "Error: ${ex.message}")
-            return emptyList()
+            return ArrayList()
         } catch (ex: Exception) {
             Log.d("API Call", "Error: ${ex.message}")
             return null
@@ -47,7 +47,7 @@ class QuoteRepository {
         }
     }
 
-    suspend fun getCategoryImage(category: String, count: Int): List<String?> {
+    suspend fun getCategoryImage(category: String, count: Int): ArrayList<String?> {
         val url = ArrayList<String?>()
         for (i in 1..count) {
             try {

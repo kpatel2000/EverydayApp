@@ -89,7 +89,7 @@ fun SwipeCard(quoteViewModel: QuoteViewModel, uiState: UiStates) {
         LazySwipeCards(
             cardShape = RoundedCornerShape(16.dp),
             cardShadowElevation = 4.dp,
-            visibleItemCount = 4,
+            visibleItemCount = 2,
             rotateDegree = 15f,
             translateSize = 24.dp,
             animationSpec = SpringSpec(),
@@ -103,10 +103,10 @@ fun SwipeCard(quoteViewModel: QuoteViewModel, uiState: UiStates) {
                 horizontal = 24.dp
             )
         ) {
-            onSwiped { item, direction ->
+            onSwiped { _, _ ->
                 quoteViewModel.onEvent(QuotesUiEvents.TryAgain)
             }
-            itemsIndexed(mutableListOf(null)) { index, quoteData ->
+            itemsIndexed(mutableListOf(null)) { _, quoteData ->
                 CardContent(quoteData, null)
             }
         }
@@ -128,11 +128,12 @@ fun SwipeCard(quoteViewModel: QuoteViewModel, uiState: UiStates) {
                 horizontal = 24.dp
             )
         ) {
-            onSwiped { item, direction ->
+            onSwiped { _, _ ->
                 quoteViewModel.onEvent(QuotesUiEvents.NextQuote)
             }
-            itemsIndexed(uiState.quotes.toMutableList()) { index, quoteData ->
-                var image: String? = uiState.images.get(index)
+            val list = uiState.quotes
+            itemsIndexed(list) { index, quoteData ->
+                val image: String? = uiState.images[index]
                 CardContent(quoteData, image)
             }
         }
@@ -236,16 +237,6 @@ fun CardContent(quote: String?, image: String?) {
                                 .padding(all = 20.dp)
                                 .fillMaxWidth() else Modifier.padding(all = 20.dp)
                         )
-                        /*Text(
-                        text = "~ ${quote?.author}" ?: "Author Name",
-                        fontSize = 16.sp,
-                        color = Color.White,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = 40.dp, top = 10.dp),
-                        textAlign = TextAlign.End,
-                        fontWeight = FontWeight.Medium
-                    )*/
                     }
                     Row(
                         modifier = Modifier
