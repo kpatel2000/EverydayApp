@@ -10,7 +10,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitInstance {
 
-    private const val IMAGE_BASE_URL = "https://api.api-ninjas.com/v1/"
+    private const val IMAGE_BASE_URL = "https://boringapi.com/api/v1/"
     private const val QUOTE_BASE_URL = "https://quote-generator-api-six.vercel.app"
 
     private val retrofit: Retrofit by lazy {
@@ -32,14 +32,9 @@ object RetrofitInstance {
             .baseUrl(IMAGE_BASE_URL)
             .client(OkHttpClient()
                 .newBuilder()
-                .addNetworkInterceptor { chain ->
-                    val request = chain.request().newBuilder()
-                    request.addHeader("x-api-key", BuildConfig.API_KEY)
-                    chain.proceed(request.build())
-                }
                 .build()
             )
-            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 

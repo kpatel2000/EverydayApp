@@ -51,9 +51,9 @@ class QuoteRepository {
         val url = ArrayList<String?>()
         for (i in 1..count) {
             try {
-                val response = imageService.getCategoryImage(category)
+                val response = imageService.getCategoryImage(1)
                 if (response.isSuccessful && response.body() != null) {
-                    url.add(response.body())
+                    url.add(response.body()?.photos[0]?.url)
                 }
             } catch (ex: Exception) {
                 Log.d("API Call", "getCategoryImage: ${ex.message}")
@@ -65,9 +65,9 @@ class QuoteRepository {
     suspend fun prefetchCategoryImage(): String? {
         var url: String? = null
         try {
-            val response = imageService.getCategoryImage("nature")
+            val response = imageService.getCategoryImage(1)
             if (response.isSuccessful && response.body() != null) {
-                url = response.body()
+                url = response.body()?.photos[0]?.url
             }
         } catch (ex: Exception) {
             Log.d("API Call", "getCategoryImage: ${ex.message}")

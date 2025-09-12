@@ -50,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.ImageLoader
+import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
@@ -190,10 +191,8 @@ fun CardContent(quote: String?, image: String?) {
                 val painter: Painter = painterResource(id = R.drawable.nature)
 
                 if (!image.isNullOrEmpty()) {
-                    val imageBytes = Base64.decode(image, Base64.DEFAULT)
-                    val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                     Image(
-                        painter = rememberAsyncImagePainter(model = decodedImage),
+                        painter = rememberAsyncImagePainter(model = image),
                         contentDescription = "Quote Background",
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.FillBounds,

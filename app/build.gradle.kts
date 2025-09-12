@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.gms.google-services")
     alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.compose.compiler)
 }
 
 val localProperties = Properties()
@@ -17,14 +18,14 @@ if (localPropertiesFile.exists()) {
 
 android {
     namespace = "com.unicorndevelopers.inkspiration"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.unicorndevelopers.inkspiration"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 3
-        versionName = "1.3"
+        targetSdk = 36
+        versionCode = 4
+        versionName = "1.4"
 
         buildConfigField("String", "API_KEY", "\"${localProperties["QUOTE_API_KEY"]}\"")
 
